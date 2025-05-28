@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정의의 저울: 시민 A와 권력자 자녀 B 비교 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ECF0F1; /* Light Gray Background */
+        }
+        .header-bg {
+            background-color: #2C3E50; /* Dark Blue/Charcoal */
+            color: #FFFFFF;
+        }
+        .nav-bg {
+            background-color: rgba(44, 62, 80, 0.9); /* Semi-transparent Dark Blue/Charcoal */
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px; 
+            margin-left: auto;
+            margin-right: auto;
+            height: 380px; 
+            max-height: 420px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 420px;
+                max-height: 480px;
+            }
+        }
+        h1, h2, h3, h4 {
+            color: #2C3E50; 
+            font-weight: 700;
+        }
+        .section-intro {
+            font-size: 1.125rem; 
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+            color: #34495E; 
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .text-primary-dark { color: #2C3E50; }
+        .text-primary-light { color: #3498DB; } /* Blue for accents */
+        .text-muted { color: #7F8C8D; } /* Gray for less important text */
+        .table-header {
+            background-color: #3498DB; /* Blue */
+            color: white;
+        }
+        .icon-style {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            color: #3498DB; /* Blue */
+        }
+        .nav-link {
+            padding: 0.75rem 1rem;
+            color: #ECF0F1;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 0.375rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #3498DB;
+            color: #FFFFFF;
+        }
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding: 0 1rem;
+        }
+        .details-content.open {
+            padding: 1rem;
+        }
+        .clickable-card {
+            cursor: pointer;
+        }
+        .reform-item {
+            border-left: 4px solid #3498DB;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        .footer-bg {
+            background-color: #34495E; /* Slightly lighter dark blue */
+            color: #BDC3C7; /* Light gray text */
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="text-primary-dark scroll-smooth">
+
+    <nav id="navbar" class="nav-bg sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <a href="#top" class="text-xl font-bold text-white">정의의 저울</a>
+                <div class="hidden md:flex space-x-1">
+                    <a href="#intro" class="nav-link">서론</a>
+                    <a href="#comparison" class="nav-link">절차 비교</a>
+                    <a href="#mechanisms" class="nav-link">불균형 기제</a>
+                    <a href="#rights" class="nav-link">권리 침해</a>
+                    <a href="#remedies" class="nav-link">A의 구제</a>
+                    <a href="#reforms" class="nav-link">제도 개선</a>
+                    <a href="#conclusion" class="nav-link">결론</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <a href="#intro" class="block nav-link text-center">서론</a>
+            <a href="#comparison" class="block nav-link text-center">절차 비교</a>
+            <a href="#mechanisms" class="block nav-link text-center">불균형 기제</a>
+            <a href="#rights" class="block nav-link text-center">권리 침해</a>
+            <a href="#remedies" class="block nav-link text-center">A의 구제</a>
+            <a href="#reforms" class="block nav-link text-center">제도 개선</a>
+            <a href="#conclusion" class="block nav-link text-center">결론</a>
+        </div>
+    </nav>
+
+    <header id="top" class="header-bg py-16 sm:py-20 text-center">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl sm:text-5xl font-bold mb-4 text-white">정의의 저울</h1>
+            <p class="text-xl sm:text-2xl text-gray-200">시민 A와 권력자 자녀 B, 두 갈래 사법 시스템 비교 분석</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-8">
+
+        <section id="intro" class="mb-16 scroll-mt-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">I. 서론: 문제 제기</h2>
+            <p class="section-intro text-center">
+                대한민국 헌법 제11조는 "모든 국민은 법 앞에 평등하다"고 선언합니다. 그러나 현실에서 이 약속은 모두에게 동일하게 지켜지고 있을까요? "유전무죄 무전유죄"라는 냉소는 단순한 풍문을 넘어 우리 사회 사법 시스템에 대한 깊은 불신을 반영합니다. 본 분석은 동일한 상해 혐의를 받는 두 가상 인물, 평범한 시민 '김민준(A)'과 유력 국회의원의 아들 '박지훈(B)'의 사례를 통해 이러한 문제를 탐구하는 사고실험입니다.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card text-center">
+                    <div class="icon-style">👤</div>
+                    <h3 class="text-2xl font-semibold mb-2">가상 인물 A: 김민준</h3>
+                    <p class="text-muted">28세, 중소기업 계약직. 평범한 중산층 가정 출신, 법적/정치적 연줄 없음.</p>
+                </div>
+                <div class="card text-center">
+                    <div class="icon-style">🤵</div>
+                    <h3 class="text-2xl font-semibold mb-2">가상 인물 B: 박지훈</h3>
+                    <p class="text-muted">26세, 유력 국회의원 자녀. 막대한 가족 재력과 인맥 네트워크 접근 가능.</p>
+                </div>
+            </div>
+            <p class="mt-6 text-center text-lg text-gray-700">이 두 인물이 동일한 범죄 혐의로 형사사법 절차를 밟게 된다면, 과연 정의의 저울은 수평을 이룰 수 있을까요?</p>
+        </section>
+
+        <section id="comparison" class="mb-16 scroll-mt-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">II. 두 갈래 사법 절차 비교</h2>
+            <p class="section-intro text-center">
+                김민준(A)과 박지훈(B)이 동일한 상해 혐의로 동시에 수사기관에 인지되었다고 가정했을 때, 각 형사 절차 단계에서 예상되는 경험과 결과는 어떻게 다를 수 있을까요? 아래 표는 그 차이를 비교 분석한 것입니다.
+            </p>
+            <div class="card overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead class="table-header">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">법적 단계</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">김민준(A) 예상</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">박지훈(B) 예상</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr><td class="px-4 py-3 font-medium">1. 경찰 초기 대응</td><td class="px-4 py-3">정식 체포, 일반 조사, 국선변호인 가능성</td><td class="px-4 py-3">변호인 즉시 선임, "임의동행" 조사, 신중한 경찰 대응</td></tr>
+                        <tr><td class="px-4 py-3 font-medium">2. 구속영장/보석</td><td class="px-4 py-3">구속영장 청구 가능성 높음, 보석 어려움</td><td class="px-4 py-3">불구속 수사/재판 가능성 높음, 보석 용이</td></tr>
+                        <tr><td class="px-4 py-3 font-medium">3. 검찰 수사/기소</td><td class="px-4 py-3">상해죄 정식 기소 가능성 높음</td><td class="px-4 py-3">혐의 축소 또는 기소유예 시도, 검찰 재량권 유리하게 작용 가능성</td></tr>
+                        <tr><td class="px-4 py-3 font-medium">4. 재판 진행</td><td class="px-4 py-3">표준적 속도, 사실관계 위주 공판</td><td class="px-4 py-3">전략적 지연 가능성, 정교한 법리 다툼, 언론 관심</td></tr>
+                        <tr><td class="px-4 py-3 font-medium">5. 1심 판결 (양형)</td><td class="px-4 py-3">유죄 및 실형 포함 표준적 형량</td><td class="px-4 py-3">유죄 시에도 집행유예/벌금 등 관대한 처벌 가능성 ("3·5 법칙")</td></tr>
+                        <tr><td class="px-4 py-3 font-medium">6. 항소 절차</td><td class="px-4 py-3">경제적 부담 등으로 항소 제한적</td><td class="px-4 py-3">불리 시 대법원까지 항소 가능성 높음</td></tr>
+                        <tr><td class="px-4 py-3 font-medium">7. 장기적 결과</td><td class="px-4 py-3" style="color: #E74C3C;">취업/사회생활에 심각한 지장</td><td class="px-4 py-3" style="color: #2ECC71;">가족 지원으로 사회적 재기 용이, 영향 최소화</td></tr>
+                    </tbody>
+                </table>
+                <p class="mt-4 text-sm text-gray-600">이 표는 각 단계에서 발생할 수 있는 주요 차이점을 요약한 것입니다. 각 항목을 클릭하면 더 자세한 설명을 볼 수 있습니다 (구현 예정).</p>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="mb-16 scroll-mt-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">III. 불균형의 기제들: 보이지 않는 손</h2>
+            <p class="section-intro text-center">
+                그렇다면 무엇이 이러한 잠재적 불균형을 만들어낼까요? 사법 정의의 저울을 기울게 할 수 있는 핵심 기제들은 다음과 같습니다.
+            </p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card clickable-card" data-detail-target="detail-jeon_gwan">
+                    <div class="icon-style">🤝</div><h3 class="text-xl font-semibold mb-2">전관예우</h3>
+                    <p class="text-sm text-muted">전직 고위 판·검사 출신 변호사가 현직 후배로부터 받는 비공식적 예우. 사건 처리 전반에 영향력 행사 가능성.</p>
+                    <div id="detail-jeon_gwan" class="details-content mt-2 text-sm text-gray-600 border-t pt-2">전관 변호사의 존재는 수사 방향, 기소 여부, 재판부의 심증 형성 등에 미묘하지만 결정적인 영향을 미칠 수 있습니다. 이는 법조계 내부의 인맥과 위계질서에 기반한 비공식적 관행으로, 공정성에 대한 심각한 위협입니다.</div>
+                </div>
+                <div class="card clickable-card" data-detail-target="detail-prosecutorial_discretion">
+                    <div class="icon-style">⚖️</div><h3 class="text-xl font-semibold mb-2">검찰권의 재량</h3>
+                    <p class="text-sm text-muted">기소 여부, 적용 죄명, 구형 등 검찰의 광범위한 재량권이 특정인에게 유리하거나 불리하게 작용할 가능성.</p>
+                    <div id="detail-prosecutorial_discretion" class="details-content mt-2 text-sm text-gray-600 border-t pt-2">대한민국 검찰은 수사권과 기소권을 독점하며 막대한 재량권을 행사합니다. 이 재량권이 외부 압력이나 내부적 고려로 인해 자의적으로 행사될 경우, 유력 인사에게는 관대한 처분, 일반 시민에게는 엄격한 법 적용이라는 불평등을 초래할 수 있습니다.</div>
+                </div>
+                <div class="card clickable-card" data-detail-target="detail-judicial_independence">
+                    <div class="icon-style">🏛️</div><h3 class="text-xl font-semibold mb-2">사법부 독립성 문제</h3>
+                    <p class="text-sm text-muted">정치·경제 권력, 특정 여론으로부터 법관의 독립적 판단이 침해받을 위험성.</p>
+                    <div id="detail-judicial_independence" class="details-content mt-2 text-sm text-gray-600 border-t pt-2">법관은 헌법과 법률, 양심에 따라 독립하여 심판해야 하지만, 현실에서는 정치적 압력, 여론, 또는 내부 승진 등 다양한 요인으로부터 완전히 자유롭기 어렵습니다. 사법농단 사건 등은 이러한 독립성 훼손의 심각성을 보여줍니다.</div>
+                </div>
+                <div class="card clickable-card" data-detail-target="detail-media_influence">
+                    <div class="icon-style">📰</div><h3 class="text-xl font-semibold mb-2">언론 및 여론 조작</h3>
+                    <p class="text-sm text-muted">유력 인사 측의 언론 통제 또는 우호적 여론 형성 시도. 평범한 시민은 불리한 프레임에 갇힐 수 있음.</p>
+                    <div id="detail-media_influence" class="details-content mt-2 text-sm text-gray-600 border-t pt-2">유력 인사들은 언론에 대한 접근성과 영향력을 활용하여 자신에게 유리한 여론을 조성하거나 불리한 정보를 통제하려 시도할 수 있습니다. 이는 사건의 본질을 왜곡하고 간접적으로 사법 판단에 영향을 미칠 수 있습니다.</div>
+                </div>
+                <div class="card clickable-card" data-detail-target="detail-legal_aid_gap">
+                    <div class="icon-style">💼</div><h3 class="text-xl font-semibold mb-2">변호인 조력의 격차</h3>
+                    <p class="text-sm text-muted">최고 로펌의 조직적 변론과 국선/영세 변호사의 "무기 불균형". 방어권 행사에 결정적 차이 초래.</p>
+                    <div id="detail-legal_aid_gap" class="details-content mt-2 text-sm text-gray-600 border-t pt-2">변호인의 조력을 받을 권리는 헌법상 보장되지만, 현실에서는 변호사의 질과 투입 자원에서 엄청난 차이가 발생합니다. 이는 실질적인 "무기 대등의 원칙"을 훼손하고, 재판 결과에 직접적인 영향을 미칠 수 있습니다.</div>
+                </div>
+                 <div class="card clickable-card" data-detail-target="detail-strategic_delay">
+                    <div class="icon-style">⏳</div><h3 class="text-xl font-semibold mb-2">전략적 소송 지연</h3>
+                    <p class="text-sm text-muted">유력 피고인 측이 합법적 절차를 활용해 재판을 장기화시켜 증거 가치 희석, 여론 관심 분산 등을 유도.</p>
+                    <div id="detail-strategic_delay" class="details-content mt-2 text-sm text-gray-600 border-t pt-2">재판이 길어지면 증인의 기억이 흐려지거나 증거의 가치가 퇴색될 수 있으며, 대중의 관심이 멀어지거나 정치적 상황이 변동될 수도 있습니다. 이는 신속한 재판을 받을 권리의 이면으로, 풍부한 자원을 가진 피고인 측의 방어 전략으로 악용될 수 있습니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rights" class="mb-16 scroll-mt-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">IV. 헌법적 권리 침해 분석</h2>
+            <p class="section-intro text-center">
+                김민준(A)과 박지훈(B)의 가상 비교 사례는 다음과 같은 핵심적인 헌법상 기본권이 침해될 수 있음을 시사합니다.
+            </p>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="card text-center p-6">
+                    <h3 class="text-xl font-semibold mb-3">공정한 재판을 받을 권리</h3>
+                    <p class="text-sm text-gray-600">(헌법 제27조 제1항)</p>
+                    <p class="mt-2">독립되고 공정한 법관, 법률과 절차 준수, 피고인의 방어권 보장, 당사자 간 무기 대등이 핵심. A와 B의 현저한 절차적 차이는 이 권리의 침해 가능성을 보여줍니다.</p>
+                </div>
+                <div class="card text-center p-6">
+                    <h3 class="text-xl font-semibold mb-3">신속한 재판을 받을 권리</h3>
+                    <p class="text-sm text-gray-600">(헌법 제27조 제3항)</p>
+                    <p class="mt-2">불필요한 지연 없는 재판은 피고인과 사회 모두의 이익. A의 '신속'이 과연 권리 보호였는지, B의 '지연'이 정당했는지 의문입니다.</p>
+                </div>
+                <div class="card text-center p-6">
+                    <h3 class="text-xl font-semibold mb-3">법 앞의 평등 원칙</h3>
+                    <p class="text-sm text-gray-600">(헌법 제11조)</p>
+                    <p class="mt-2">사회적 신분에 따른 차별 금지. B의 '사회적 신분'이 재판에 유리하게 작용했다면, A에 대한 명백한 평등권 침해입니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="remedies" class="mb-16 scroll-mt-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">V. 시민 A의 구제 방안과 한계</h2>
+            <p class="section-intro text-center">
+                만약 김민준(A)이 유죄 확정 후, 박지훈(B) 사건에서 명백한 불공정이나 A에게 유리한 사실이 드러난다면 A는 권리를 구제받을 수 있을까요? 현행법상 가능한 구제 수단과 그 한계는 다음과 같습니다. 아래 차트는 각 구제 수단의 추정적 성공 가능성을 시각화한 것입니다 (점수가 낮을수록 어려움).
+            </p>
+            <div class="card">
+                <h3 class="text-xl font-semibold mb-6 text-center">주요 법적 구제 수단별 추정적 성공 가능성</h3>
+                <div class="chart-container">
+                    <canvas id="remediesChart"></canvas>
+                </div>
+                <div class="mt-8 grid md:grid-cols-3 gap-4 text-sm">
+                    <div class="p-3 border border-gray-200 rounded-lg">
+                        <h4 class="font-semibold text-primary-light">재심 청구 (형사소송법 제420조)</h4>
+                        <p class="text-muted mt-1">요건: 새롭고 명백한 무죄 증거, 또는 관여 공무원의 직무상 범죄 확정판결 등. 입증 매우 까다로움.</p>
+                    </div>
+                    <div class="p-3 border border-gray-200 rounded-lg">
+                        <h4 class="font-semibold text-primary-light">헌법소원 (헌법재판소법 제68조1항)</h4>
+                        <p class="text-muted mt-1">요건: 법원의 재판 원칙적 제외. 검찰의 자의적 공권력 행사 등 주장 가능하나, 인용 가능성 낮음.</p>
+                    </div>
+                    <div class="p-3 border border-gray-200 rounded-lg">
+                        <h4 class="font-semibold text-primary-light">국가배상 청구 (국가배상법)</h4>
+                        <p class="text-muted mt-1">요건: 법관/검사의 고의·중과실 입증 필요. 금전 배상에 그치며 유죄 판결 취소 불가.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="reforms" class="mb-16 scroll-mt-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">VI. 제도 개선 제언</h2>
+            <p class="section-intro text-center">
+                법 앞의 평등을 실질적으로 구현하고 사법 시스템에 대한 국민 신뢰를 회복하기 위해서는 다음과 같은 제도적·입법적 개선이 필요합니다.
+            </p>
+            <div class="space-y-6">
+                <div class="reform-item card clickable-card" data-detail-target="reform-constitutional_court_act">
+                    <h3 class="text-xl font-semibold">헌법재판소법 개정</h3>
+                    <p class="text-sm text-muted mt-1">"명백히 정의에 반하는 재판"에 대한 헌법소원 예외적 허용 검토.</p>
+                    <div id="reform-constitutional_court_act" class="details-content mt-3 text-sm text-gray-700 border-t pt-3">현행 재심 사유에 포섭되지 않는 근본적인 부정의를 시정할 최후의 보루를 마련하기 위함입니다. 독일 연방헌법재판소 사례 등을 참고하여, 엄격한 요건 하에 예외적으로 법원의 재판에 대한 헌법소원을 허용하는 방안을 신중히 검토해야 합니다.</div>
+                </div>
+                <div class="reform-item card clickable-card" data-detail-target="reform-criminal_procedure_act">
+                    <h3 class="text-xl font-semibold">형사소송법 개정</h3>
+                    <p class="text-sm text-muted mt-1">재심사유 확대 및 요건 완화, 신속한 재판권 강화, 증거개시제도 확대.</p>
+                    <div id="reform-criminal_procedure_act" class="details-content mt-3 text-sm text-gray-700 border-t pt-3">
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>재심사유 확대:</strong> '새롭고 명백한 증거'의 기준을 현실화하고, 공무원 직무상 범죄 입증 요건을 완화하여 실질적 재심 기회를 보장해야 합니다.</li>
+                            <li><strong>신속한 재판권 강화:</strong> 정당한 이유 없는 현저한 재판 지연 시 공소기각 등 실효성 있는 구제 수단을 마련해야 합니다.</li>
+                            <li><strong>증거개시제도 확대:</strong> 검사가 보유한 모든 증거(피고인에게 유리한 증거 포함)를 의무적으로 공개하도록 하여 실질적 무기 대등을 보장해야 합니다.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="reform-item card clickable-card" data-detail-target="reform-prosecutorial_control">
+                    <h3 class="text-xl font-semibold">검찰권 통제 강화</h3>
+                    <p class="text-sm text-muted mt-1">기소재량권의 투명성·책임성 강화, 중요 불기소 결정에 대한 시민 통제 장치 마련.</p>
+                    <div id="reform-prosecutorial_control" class="details-content mt-3 text-sm text-gray-700 border-t pt-3">검사의 기소편의주의 한계를 보완하고, 자의적인 공소권 행사를 방지하기 위해 독립적인 기소심의위원회 강화 등 외부 통제 장치를 실질화해야 합니다.</div>
+                </div>
+                <div class="reform-item card clickable-card" data-detail-target="reform-end_jeon_gwan">
+                    <h3 class="text-xl font-semibold">"전관예우" 근절</h3>
+                    <p class="text-sm text-muted mt-1">퇴직 법관·검사 수임 제한 강화, 법조윤리위원회 권한 강화.</p>
+                    <div id="reform-end_jeon_gwan" class="details-content mt-3 text-sm text-gray-700 border-t pt-3">이해충돌 방지를 위해 퇴직 공직자의 사건 수임 제한 기간과 범위를 대폭 확대하고, 위반 시 강력한 처벌 규정을 신설해야 합니다. 법조윤리위원회의 독립성과 권한을 강화하여 자정 노력을 촉진해야 합니다.</div>
+                </div>
+                <div class="reform-item card clickable-card" data-detail-target="reform-judicial_access">
+                    <h3 class="text-xl font-semibold">사법 접근성 향상</h3>
+                    <p class="text-sm text-muted mt-1">국선변호인 제도 질적·양적 확충, 법률구조공단 지원 확대.</p>
+                    <div id="reform-judicial_access" class="details-content mt-3 text-sm text-gray-700 border-t pt-3">경제적 약자도 실질적인 법률 조력을 받을 수 있도록 국선변호인 예산과 인력을 대폭 확충하고, 변호의 질을 높여야 합니다. 소송구조제도 확대도 필요합니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="mb-12 scroll-mt-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">VII. 결론: 더 정의로운 시스템을 향하여</h2>
+            <div class="card text-center">
+                <p class="text-lg md:text-xl italic text-gray-700 mb-4">
+                    "김민준과 박지훈의 가상 이야기는 우리에게 묻습니다. 과연 대한민국에서 정의는 모두에게 평등하게 작동하고 있는가?"
+                </p>
+                <p class="text-gray-600">
+                    사법 시스템에 대한 국민적 불신은 개인의 억울함을 넘어 사회 전체의 안정과 발전을 저해합니다. 법 앞의 평등이라는 헌법적 이상을 현실에서 구현하기 위해서는, 본 보고서에서 논의된 바와 같이 시스템적 결함을 개선하고, 권력의 부당한 영향력을 차단하며, 모든 시민에게 공정한 사법 서비스를 제공하기 위한 끊임없는 노력이 필요합니다. 정의를 향한 여정은 계속되어야 합니다.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-bg text-center p-8">
+        <p class="text-sm">
+            본 애플리케이션은 제공된 법률 분석 보고서 내용을 기반으로 제작된 정보 제공용 SPA입니다.
+            제시된 내용은 가상의 시나리오에 기반한 분석이며, 특정 개인이나 실제 사건을 지칭하지 않습니다.
+        </p>
+        <!-- Visualization & Content Choices: 
+             - A vs B Profiles (Sec 1): Cards with Unicode icons. Goal: Inform/Compare. Method: HTML/CSS. Justification: Clear visual distinction.
+             - Comparative Timeline (Sec 2): HTML Table. Goal: Compare/Change. Method: HTML/CSS. Justification: Detailed side-by-side comparison.
+             - Mechanisms (Sec 3): Clickable Cards with Unicode icons & details. Goal: Organize/Inform. Method: HTML/CSS/JS. Justification: Categorized display with interactive details.
+             - Rights (Sec 4): Cards. Goal: Inform. Method: HTML/CSS. Justification: Emphasize constitutional basis.
+             - Remedies Chart (Sec 5): Chart.js Horizontal Bar. Goal: Compare/Inform. Method: Chart.js (Canvas). Justification: Visual aid for perceived difficulty of remedies. NO SVG. Label wrapping and tooltip configured.
+             - Reforms (Sec 6): Clickable Accordion-style Cards. Goal: Organize/Inform. Method: HTML/CSS/JS. Justification: Structured presentation of solutions with details on demand.
+             - All content synthesized from provided Korean reports. -->
+        </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Navbar active link highlighting
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('nav a.nav-link');
+
+        window.onscroll = () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 80) { // 80px for navbar height + buffer
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        };
+
+        // Clickable card details toggle
+        document.querySelectorAll('.clickable-card').forEach(card => {
+            card.addEventListener('click', (event) => {
+                // Prevent click on link inside card from toggling
+                if (event.target.tagName === 'A') return;
+
+                const targetId = card.dataset.detailTarget;
+                if (targetId) {
+                    const detailElement = document.getElementById(targetId);
+                    if (detailElement) {
+                        detailElement.classList.toggle('open');
+                        if (detailElement.classList.contains('open')) {
+                            detailElement.style.maxHeight = detailElement.scrollHeight + "px";
+                        } else {
+                            detailElement.style.maxHeight = '0';
+                        }
+                    }
+                }
+            });
+        });
+
+        // Chart.js for Remedies
+        const remediesCtx = document.getElementById('remediesChart');
+        if (remediesCtx) {
+            const remediesData = {
+                labels: [
+                    '재심 청구', 
+                    ['헌법소원', '(재판 자체 제외 원칙)'], 
+                    '국가배상 청구'
+                ],
+                datasets: [{
+                    label: '추정적 성공 가능성 (점수가 낮을수록 어려움)',
+                    data: [20, 30, 40], // Lower scores mean more difficult / less likely to succeed
+                    backgroundColor: [
+                        'rgba(231, 76, 60, 0.7)',  // Accent Red (#E74C3C) for 20
+                        'rgba(243, 156, 18, 0.7)', // Orange (#F39C12) for 30
+                        'rgba(241, 196, 15, 0.7)'  // Accent Yellow (#F1C40F) for 40
+                    ],
+                    borderColor: [
+                        '#E74C3C', 
+                        '#F39C12', 
+                        '#F1C40F'  
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            const remediesConfig = {
+                type: 'bar',
+                data: remediesData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '성공 가능성 점수 (0-100)',
+                                font: { size: 12, family: 'Noto Sans KR' }
+                            },
+                            ticks: { font: { size: 10, family: 'Noto Sans KR' } }
+                        },
+                        y: {
+                           ticks: { 
+                                font: { size: 11, family: 'Noto Sans KR' },
+                                callback: function(value, index, values) {
+                                    let label = this.getLabelForValue(value);
+                                    if (Array.isArray(label)) {
+                                        return label; 
+                                    }
+                                    const maxLength = 16; 
+                                    if (typeof label === 'string' && label.length > maxLength) {
+                                        let lines = [];
+                                        let currentLine = '';
+                                        label.split(' ').forEach(word => {
+                                            if ((currentLine + word).length > maxLength && currentLine.length > 0) {
+                                                lines.push(currentLine.trim());
+                                                currentLine = '';
+                                            }
+                                            currentLine += word + ' ';
+                                        });
+                                        lines.push(currentLine.trim());
+                                        return lines;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false 
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    }
+                                    return label;
+                                }
+                            },
+                            bodyFont: { family: 'Noto Sans KR' },
+                            titleFont: { family: 'Noto Sans KR' }
+                        }
+                    }
+                }
+            };
+            new Chart(remediesCtx, remediesConfig);
+        }
+    </script>
+</body>
+</html>
